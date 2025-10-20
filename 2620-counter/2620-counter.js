@@ -3,7 +3,6 @@
  * @return {Function} counter
  */
 function createCounter(n) {
-  function counter() { return counter._v++; }
-  counter._v = n | 0;
-  return counter;
+  let v = n | 0;            // fuerza Small Integer (SMI)
+  return function() { return v++; };
 }
