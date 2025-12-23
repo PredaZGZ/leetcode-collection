@@ -1,39 +1,32 @@
 class Solution {
     public int myAtoi(String s) {
-        int i = 0;
         int n = s.length();
+        int i = 0;
+
+        while (i < n && s.charAt(i) == ' ') i++;
+
         int sign = 1;
-        long value = 0;
-
-        while (i < n && s.charAt(i) == ' ') {
-            i++;
-        }
-
         if (i < n) {
-            if (s.charAt(i) == '-') {
-                sign = -1;
-                i++;
-            } else if (s.charAt(i) == '+') {
-                i++;
-            }
+            char c = s.charAt(i);
+            if (c == '-') { sign = -1; i++; }
+            else if (c == '+') { i++; }
         }
 
-        while (i < n) {
-            char c = s.charAt(i);
-            if (c < '0' || c > '9') {
-                break;
-            }
-            value = value * 10 + (c - '0');
+        int limit = (sign == 1) ? -Integer.MAX_VALUE : Integer.MIN_VALUE; 
+        int multMin = limit / 10;                                          
 
-            if (sign == 1 && value > Integer.MAX_VALUE) {
-                return Integer.MAX_VALUE;
-            }
-            if (sign == -1 && -value < Integer.MIN_VALUE) {
-                return Integer.MIN_VALUE;
-            }
+        int res = 0; 
+        while (i < n) {
+            int d = s.charAt(i) - '0';
+            if (d < 0 || d > 9) break;
+
+            if (res < multMin) return (sign == 1) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            if (res == multMin && d > -(limit % 10)) return (sign == 1) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+
+            res = res * 10 - d;
             i++;
         }
 
-        return (int) (sign * value);
+        return (sign == 1) ? -res : res;
     }
 }
