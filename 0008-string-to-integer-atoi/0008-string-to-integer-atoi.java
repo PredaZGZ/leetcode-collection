@@ -1,6 +1,6 @@
 class Solution {
     public int myAtoi(String s) {
-        int n = s.length();
+        final int n = s.length();
         int i = 0;
 
         while (i < n && s.charAt(i) == ' ') i++;
@@ -12,16 +12,18 @@ class Solution {
             else if (c == '+') { i++; }
         }
 
-        int limit = (sign == 1) ? -Integer.MAX_VALUE : Integer.MIN_VALUE; 
-        int multMin = limit / 10;                                          
+        final int limit = (sign == 1) ? -2147483647 : -2147483648;
+        final int multMin = -214748364;              
+        final int lastDigit = (sign == 1) ? 7 : 8;  
 
-        int res = 0; 
+        int res = 0; // negativo
         while (i < n) {
-            int d = s.charAt(i) - '0';
+            char c = s.charAt(i);
+            int d = c - '0';
             if (d < 0 || d > 9) break;
 
-            if (res < multMin) return (sign == 1) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
-            if (res == multMin && d > -(limit % 10)) return (sign == 1) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            if (res < multMin || (res == multMin && d > lastDigit))
+                return (sign == 1) ? 2147483647 : -2147483648;
 
             res = res * 10 - d;
             i++;
